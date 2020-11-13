@@ -1,0 +1,24 @@
+syntax: glob
+*.o
+*.orig
+*.rej
+*.pyc
+*.tmp
+*~
+*.pid
+.env*
+.\#*
+.svn/*
+env/*
+env3/*
+venv/*
+env33/*
+_trial_temp/*
+ssl/*
+.DS_Store
+.idea/*
+./dumps/*
+.ropeproject/*
+sqldumps/*
+node_modules/*
+public/*
