@@ -1,13 +1,9 @@
 const express = require('express');
-
 const app = express();
+const tourRoutes = require('./routes/tourRoutes');
 
-app.get('/', (req, res) => {
-    res.status(200).json({message: 'Hello from server side', app: "natours"});
-})
+app.use(express.json());
 
-const port = 2000;
+app.use('/api/v1/tours', tourRoutes);
 
-app.listen(port, () => {
-    console.log(`App run to port ${port}...`);
-});
+module.exports = app;
