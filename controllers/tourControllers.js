@@ -3,10 +3,21 @@ const fs = require('fs');
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`));
 
 exports.checkId = (req, res, next, val) => {
+    console.log(val);
     if(Number(req.params.id) > tours.length) {
         return res.status(404).json({
             status: 'fail',
             message: "ID not found"
+        })
+    }
+    next();
+}
+
+exports.checkBody = (req, res, next) => {
+    if(!req.body.name && !req.body.id) {
+        return res.status(400).json({
+            status: 'fail',
+            message: "You dont have name or id field"
         })
     }
     next();
@@ -38,7 +49,6 @@ exports.getTour = (req, res) => {
 exports.setNewTour = (req, res) => {
 
     const newTourId = tours[tours.length - 1].id + 1;
-    console.log(newTourId);
     const newTour = Object.assign({id: newTourId},  req.body)
 
     tours.push(newTour);
