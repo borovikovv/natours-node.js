@@ -10,7 +10,6 @@ mongoose.connect(DB, {
     useCreateIndex: true,
     useFindAndModify: false
 }).then(conn => {
-    console.log(conn.connections)
     console.log('DB connections success!')
 })
 
