@@ -1,7 +1,10 @@
 const express = require('express');
-const { getAllTours, getTour, setNewTour, updateTour, deleteTour } = require('./../controllers/tourControllers');
+const { getAllTours, getTour, setNewTour, updateTour, deleteTour, aliasTopTours } = require('./../controllers/tourControllers');
 
 const router = express.Router();
+
+router.route('top-5-cheap')
+    .get(aliasTopTours, getAllTours);
 
 // router.param('id', checkId)
 
