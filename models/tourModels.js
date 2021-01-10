@@ -1,11 +1,18 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 
+const MIN_NAME_LENGTH = 10;
+const MAX_NAME_LENGTH = 40;
+const MIN_RATINGS_AVAREGE = 1.0;
+const MAX_RATINGS_AVARAGE = 5.0;
+
 const tourSchema = new mongoose.Schema({
     name: {
         type: String,
         require: [true, 'A tour has have a name'],
-        unique: true
+        unique: true,
+        maxlength: [MAX_NAME_LENGTH, `A tour name must have less or equal ${MAX_NAME_LENGTH} characters`],
+        minlength: [MIN_NAME_LENGTH, `A tour name must have lmore ${MIN_NAME_LENGTH} characters`]
     },
     slug: String,
     duration: {
@@ -18,11 +25,18 @@ const tourSchema = new mongoose.Schema({
     },
     difficulty: {
         type: String,
-        require: [true, 'A tour must have a difficulty']
+        require: [true, 'A tour must have a difficulty'],
+        // only for strings
+        enum: {
+            values: ['easy', 'medium', 'difficult'],
+            message: 'Difficulty is either: easy, medium or difficult'
+        }
     },
     ratingsAverage: {
         type: Number,
-        default: 4.5
+        default: 4.5,
+        min: [MIN_RATINGS_AVAREGE, `Ratings must be above ${MIN_RATINGS_AVAREGE}`],
+        max: [MAX_RATINGS_AVARAGE, `Ratings must be below ${MAX_RATINGS_AVARAGE}`]
     },
     ratingsQuantity: {
         type: Number,
@@ -72,8 +86,14 @@ tourSchema.pre('save', function(next) {
     next();
 })
 
-tourSchema.pre( /^find/, function(next) {
+tourSchema.pre(/^find/, function(next) {
     this.find({ secretTour: { $ne: true }});
+    next();
+})
+
+tourSchema.pre('aggregate', function(next) {
+    this.pipeline().unshift({ $match: { secretTour: { $ne: true }}});
+
     next();
 })
 
