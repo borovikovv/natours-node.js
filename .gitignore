@@ -22,3 +22,4 @@ ssl/*
 sqldumps/*
 node_modules/*
 public/*
+config.env
