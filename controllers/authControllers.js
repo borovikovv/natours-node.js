@@ -54,8 +54,8 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync( async (req, res, next) => {
     let token;
-    if(req.headers.autorization && req.headers.autorization.startsWith('Bearer')) {
-        token = req.headers.autorization.split(' ')[1];
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
     }
 
     if(!token) {
@@ -76,3 +76,12 @@ exports.protect = catchAsync( async (req, res, next) => {
 
     next(); 
 })
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if(!roles.includes(req.user.role)) {
+            return next(new AppError('You do not have permisiion to perform this action!', 403));
+        }
+        next();
+    }
+}
